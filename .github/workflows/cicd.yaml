@@ -16,13 +16,37 @@ jobs:
         run: |
           hostnamectl
           echo "The repository has been checked out and the runner is alive."
-          
+
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Testing Step
+        run: |
+          hostnamectl
+          echo "The repository has been checked out and the runner is alive."
+
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Testing Step
+        run: |
+          hostnamectl
+          echo "The repository has been checked out and the runner is alive."
+
 #     - name: Configure AWS credentials
 #       uses: aws-actions/configure-aws-credentials@v4
 #       with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: ${{ secrets.AWS_REGION }}
 
 # # Login to ECR
 # #=============
@@ -30,11 +54,10 @@ jobs:
 #       id: login-ecr
 #       uses: aws-actions/amazon-ecr-login@v2
 
-
-#     - name: Docker build 
+#     - name: Docker build
 #       run: |
 #         echo "${{ vars.APPLICATION_PROPERTIES }}" > application.properties
-#         # ls -la 
+#         # ls -la
 #         # cat application.properties
 #         docker build -t netflix_backend:latest .
 
@@ -42,4 +65,3 @@ jobs:
 #       run: |
 #         docker tag netflix_backend:latest 348230509416.dkr.ecr.us-east-2.amazonaws.com/netflix_backend:${GITHUB_RUN_NUMBER}
 #         docker push 348230509416.dkr.ecr.us-east-2.amazonaws.com/netflix_backend:${GITHUB_RUN_NUMBER}
-
