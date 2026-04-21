@@ -9,12 +9,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the repository
-      uses: actions/checkout@v2
+      - name: Check out the repository
+        uses: actions/checkout@v4
 
-    -name: Docker build
-    run: |
-    hostnamectl
+      - name: Testing Step
+        run: |
+          hostnamectl
+          echo "The repository has been checked out and the runner is alive."
+          
 #     - name: Configure AWS credentials
 #       uses: aws-actions/configure-aws-credentials@v4
 #       with:
