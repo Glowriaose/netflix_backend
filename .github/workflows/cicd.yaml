@@ -17,7 +17,7 @@ jobs:
           hostnamectl
           echo "The repository has been checked out and the runner is alive."
 
-  build-and-push:
+  build-and-push2:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
           hostnamectl
           echo "The repository has been checked out and the runner is alive."
 
-  build-and-push:
+  build-and-push3:
     runs-on: ubuntu-latest
 
     steps:
