@@ -14,7 +14,7 @@ jobs:
       - name: Docker build
         run: |
           docker build -t netflix_backend:latest .
-          echo "The repository has been checked out and the runner is alive."
+          echo "The repository has been checked out and the runner is alive please proceed."
 
  
 
