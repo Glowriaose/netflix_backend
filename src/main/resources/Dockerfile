@@ -9,20 +9,23 @@ RUN apt-get update && apt-get install -y \
 # Setting the working DIR
 WORKDIR /app
 
-# Copying files
-# This copies the entire src folder, which includes the application.properties 
-# and .env since they are inside src/main/resources
-COPY ./src /app/src
-COPY ./pom.xml /app
+# 1. Copy the pom.xml (Required for Maven)
+COPY ./pom.xml /app/pom.xml
 
-# Building the app
+# 2. Copy ONLY the specific config files from their subfolders
+# Syntxt: COPY <path_in_repo> <path_in_container>
+COPY ./src/main/resources/application.properties /app/src/main/resources/application.properties
+COPY ./src/main/resources/.env /app/src/main/resources/.env
+
+# 3.  copy only specific java folder that folder 
+# (e.g., usually everything under src/main/java)
+COPY ./src/main/java /app/src/main/java
+
+# 4. Building the app
 RUN mvn clean package -DskipTests
 
-# Important: Maven creates the file "netflix_backend-0.0.1-SNAPSHOT.jar"
-# finds it and rename it to app.jar so the ENTRYPOINT works
+# 5. Prepare the final jar
 RUN mv /app/target/*.jar /app/app.jar
 
 EXPOSE 8080
-
-# Use the renamed jar
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
