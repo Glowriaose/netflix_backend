@@ -13,6 +13,7 @@ COPY  ./pom.xml /app
 
 # building the app
 RUN mvn -f /app/pom.xml clean package -DskipTests
+RUN ls -la /app/target
 
 # copy the built artifac files to the container
 COPY ./target/*.jar /app/app.jar
