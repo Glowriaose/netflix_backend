@@ -53,6 +53,7 @@ COPY ./src /app/src
 
 # 3. Build the application
 RUN mvn clean package -DskipTests
+RUN ls -la
 
 # 4. Rename the jar
 RUN cp /app/target/*.jar /app/app.jar
