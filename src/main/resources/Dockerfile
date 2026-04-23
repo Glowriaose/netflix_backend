@@ -1,28 +1,28 @@
 FROM ubuntu
 
-RUN apt-get update && apt-get install -y
-RUN apt install openjdk-17-jre-headless -y
-RUN apt install maven -y
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    openjdk-17-jre-headless \
+    maven && \
+    rm -rf /var/lib/apt/lists/*
 
-# setting the working DIR
+# Setting the working DIR
 WORKDIR /app
 
-# Copying files to the working dir.
+# Copying files
+# This copies the entire src folder, which includes the application.properties 
+# and .env since they are inside src/main/resources
 COPY ./src /app/src
-COPY  ./pom.xml /app
+COPY ./pom.xml /app
 
-# building the app
-RUN mvn -f /app/pom.xml clean package -DskipTests
-RUN ls -la /app/target
+# Building the app
+RUN mvn clean package -DskipTests
 
-# copy the built artifac files to the container
-COPY ./target/*.jar /app/app.jar
-WORKDIR /app
+# Important: Maven creates the file "netflix_backend-0.0.1-SNAPSHOT.jar"
+# finds it and rename it to app.jar so the ENTRYPOINT works
+RUN mv /app/target/*.jar /app/app.jar
 
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
 
-#FROM eclipse-temurin
-#RUN mkdir /opt/app
-#COPY    japp.jar /opt/app
-C#MD ["java", "jar", "/opt/app/japp.jar"]
+# Use the renamed jar
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
