@@ -34,30 +34,21 @@
 # # CMD ["java", "-jar", "/opt/app/japp.jar"]
 FROM ubuntu
 
-# Install necessary packages
 RUN apt-get update && apt-get install -y \
     openjdk-17-jre-headless \
     maven && \
     rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
 WORKDIR /app
 
-# 1. Copy the pom first
-COPY ./pom.xml /app/pom.xml
+COPY pom.xml .
+COPY src ./src
+COPY .env .env
 
-# 2. Copy the ENTIRE src folder
-# This automatically puts application.properties and .env 
-# into /app/src/main/resources/ where Maven expects them.
-COPY ./src /app/src
+RUN export $(cat .env | xargs) && mvn clean package -DskipTests
 
-# 3. Build the application
-RUN mvn clean package 
-RUN ls -la
-
-# 4. Rename the jar
-RUN cp /app/target/*.jar /app/app.jar
+RUN cp target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
