@@ -13,8 +13,10 @@ jobs:
 
       - name: Docker build
         run: |
+          echo "${{ vars.ENV_FILE }}" > .env
+          ls -la
           docker build -t netflix_backend:latest .
-          echo "The repository has been checked out and the runner is alive please proceed."
+          
 
  
 
