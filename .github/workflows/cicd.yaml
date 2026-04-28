@@ -13,9 +13,8 @@ jobs:
 
       - name: Docker build
         run: |
-          echo "${{ vars.ENV_FILE }}" > .env
+          echo "${{ secrets.ENV_FILE }}" > .env
           ls -la
-          cat .env
           docker build -t netflix_backend:latest .
           
 
