@@ -43,7 +43,7 @@ WORKDIR /app
 
 COPY pom.xml .
 COPY src ./src
-COPY .env .env
+COPY .env /app/src/main/resources/.env
 
 RUN export $(cat .env | xargs) && mvn clean package -DskipTests
 
