@@ -52,7 +52,7 @@ COPY ./pom.xml /app/pom.xml
 COPY ./src /app/src
 
 # 3. Build the application
-RUN mvn clean package -DskipTests
+RUN mvn clean package 
 RUN ls -la
 
 # 4. Rename the jar
