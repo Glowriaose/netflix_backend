@@ -1,60 +1,3 @@
-# name: Build and push docker image
-
-# on:
-#   push:
-#     branches: [ main ]
-
-# jobs:
-#   build-and-push:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Check out the repository
-#         uses: actions/checkout@v4
-
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v4
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: ${{ secrets.AWS_REGION }}
-
-#  #Login to ECR
-#  #=============
-#       - name: Login to ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v2
-#       - name: Docker build
-#         run: |
-#          echo "${{ secrets.ENV_FILE }}" > .env
-#            ls -la
-#           docker build -t netflix_backend:latest .
-
-#       - name: Docker push
-#         run: |
-#         docker tag netflix_backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.af-south-1.amazonaws.com/netflix_backend:${{ github.run_number }}
-#         docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.af-south-1.amazonaws.com/netflix_backend:${{ github.run_number }}
-
-# #     - name: Configure AWS credentials
-# #       uses: aws-actions/configure-aws-credentials@v4
-# #       with:
-# #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-# #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-# #         aws-region: ${{ secrets.AWS_REGION }}
-
-# # #
-
-# #     - name: Docker build
-# #       run: |
-# #         echo "${{ vars.APPLICATION_PROPERTIES }}" > application.properties
-# #         # ls -la
-# #         # cat application.properties
-# #         docker build -t netflix_backend:latest .
-
-# #     - name: Docker push
-# #       run: |
-# #         docker tag netflix_backend:latest 348230509416.dkr.ecr.us-east-2.amazonaws.com/netflix_backend:${GITHUB_RUN_NUMBER}
-# #         docker push 348230509416.dkr.ecr.us-east-2.amazonaws.com/netflix_backend:${GITHUB_RUN_NUMBER}
-
 name: Build and push docker image
 
 on:
@@ -74,24 +17,23 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION_US }}
 
       - name: Login to ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 🔥 BUILD WITH REAL MONGO URI
       - name: Docker build
         run: |
           docker build \
             --build-arg MONGO_URI="${{ secrets.MONGO_URI }}" \
-            -t netflix_backend:latest .
+            -t backend-ecr:latest .
 
       - name: Docker tag
         run: |
-          docker tag netflix_backend:latest \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/netflix_backend:${{ github.run_number }}
+          docker tag backend-ecr:latest \
+            ${{ secrets.AWS_ACCOUNT_ID_US }}.dkr.ecr.${{ secrets.AWS_REGION_US }}.amazonaws.com/backend-ecr:${{ github.run_number }}
 
       - name: Docker push
         run: |
           docker push \
-          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/netflix_backend:${{ github.run_number }}
+            ${{ secrets.AWS_ACCOUNT_ID_US }}.dkr.ecr.${{ secrets.AWS_REGION_US }}.amazonaws.com/backend-ecr:${{ github.run_number }}
